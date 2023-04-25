@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+
+
+
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
+		<property name="jdbcUrl" value="" />
+		<property name="username" value="HR" />
+		<property name="password" value="Oracle12345678" />
+		
+		<property name="maximumPoolSize" value="10" />
+		<property name="minimumIdle" value="2" />
+		<property name="idleTimeout" value="10000" />
+		<property name="connectionInitSql" value="2000" />
+		<property name="connectionTestQuery" value="SELECT 1 FROM dual" />
+		<property name="connectionTimeout" value="SELECT 1 FROM dual" />
+		<property name="dataSourceJNDI" value="jdbc/HikariCP" />
+		<property name="poolName" value="* HikariDataSource *" />
+		
+	</bean>
+	
+	<bean 
+		id="hikariDataSource" 
+		class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<constructor-arg ref="hikariConfig" /> <!-- hikari 생성자를 사용하겠다 -->
+	</bean>
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="hikariDataSource"></property>
+		<property name="configLocation" ref="classpath:mybatis-config.xml"></property>
+	</bean>
+
+</beans>
